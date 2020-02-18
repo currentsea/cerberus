@@ -18,16 +18,24 @@ package ch.qos.logback.core.rolling;
 
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /** Appender that will roll the logs every 5 minutes */
 @Slf4j
+@Component
 public class FiveMinuteRollingFileAppender<E> extends RollingFileAppender<E> {
   private long start = System.currentTimeMillis();
+
+  @Autowired
+  public FiveMinuteRollingFileAppender() {
+    log.info("FiveMinuteRollingFileAppender initialized");
+  }
 
   @Override
   public void rollover() {
     long currentTime = System.currentTimeMillis();
-    long maxIntervalSinceLastLoggingInMillis = TimeUnit.MINUTES.toMillis(5);
+    long maxIntervalSinceLastLoggingInMillis = TimeUnit.MINUTES.toMillis(1);
     log.info("In Appender rollover");
     if ((currentTime - start) >= maxIntervalSinceLastLoggingInMillis) {
       super.rollover();

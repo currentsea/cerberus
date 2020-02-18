@@ -40,6 +40,8 @@ import org.springframework.context.annotation.Import;
 @Import({AuditLogsS3TimeBasedRollingPolicy.class})
 public class AthenaAuditLoggerConfiguration {
 
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
+
   private static final String ATHENA_AUDIT_LOGGER_NAME = "athena-audit-logger";
   private static final String ATHENA_LOG_APPENDER_NAME = "athena-log-appender";
   private static final String MESSAGE_PATTERN = "%msg%n";
@@ -52,6 +54,7 @@ public class AthenaAuditLoggerConfiguration {
       AuditLogsS3TimeBasedRollingPolicy<ILoggingEvent> auditLogsS3TimeBasedRollingPolicy) {
 
     this.auditLogsS3TimeBasedRollingPolicy = auditLogsS3TimeBasedRollingPolicy;
+    log.info("AthenaAuditLoggerConfiguration initialized");
 
     LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
     PatternLayoutEncoder patternLayoutEncoder = new PatternLayoutEncoder();
@@ -95,12 +98,12 @@ public class AthenaAuditLoggerConfiguration {
     logger.setAdditive(false);
     athenaAuditLogger = logger;
 
-    athenaAuditLogger.info("completed athena audit logger configuration");
+    log.info("completed athena audit logger configuration");
   }
 
   @Bean
   public Logger getAthenaAuditLogger() {
-    athenaAuditLogger.info("retrieving athena audit logger: " + athenaAuditLogger.getName());
+    log.info("retrieving athena audit logger: " + athenaAuditLogger.getName());
     return athenaAuditLogger;
   }
 }
